@@ -1,6 +1,9 @@
 # Endpoints de la API
 (Borrador inicial — se completará en la TAREA 1)
 
+## Endpoint de salud 
+GET /health Descripción: Comprueba que la aplicación está levantada y responde 200.
+
 ## Endpoints: salas 
 GET /salas
 Descripción: Obtiene la lista de todas las salas.
