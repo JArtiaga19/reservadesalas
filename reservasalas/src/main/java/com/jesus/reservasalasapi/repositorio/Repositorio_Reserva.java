@@ -1,9 +1,10 @@
 package com.jesus.reservasalasapi.repositorio;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.jesus.reservasalasapi.modelo.Sala;
 
-public interface Repositorio_Reserva extends JpaRepository<Sala, Long> {
+import com.jesus.reservasalasapi.modelo.Reserva;
+
+public interface Repositorio_Reserva extends JpaRepository<Reserva, Long> {
     
 }
 
