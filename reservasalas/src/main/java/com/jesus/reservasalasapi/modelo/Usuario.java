@@ -24,17 +24,6 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(String nombre_usuario, String email_usuario) {
-        this.nombre_usuario = nombre_usuario;
-        this.email_usuario = email_usuario;
-    }
-
-    public Usuario(Long id_usuario, String nombre_usuario, String email_usuario) {
-        this.id_usuario = id_usuario;
-        this.nombre_usuario = nombre_usuario;
-        this.email_usuario = email_usuario;
-    }
-
     public Long getId_usuario() {
         return id_usuario;
     }

@@ -25,17 +25,6 @@ public class Sala {
 
     }
 
-    public Sala(String nombre_sala, int capacidad_sala) {
-        this.nombre_sala = nombre_sala;
-        this.capacidad_sala = capacidad_sala;
-    }
-
-    public Sala(Long id_sala, String nombre_sala, int capacidad_sala) {
-        this.id_sala = id_sala;
-        this.nombre_sala = nombre_sala;
-        this.capacidad_sala = capacidad_sala;
-    }
-
     public Long getId_sala() {
         return id_sala;
     }

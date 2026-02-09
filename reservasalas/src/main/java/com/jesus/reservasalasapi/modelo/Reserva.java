@@ -38,24 +38,6 @@ public class Reserva {
     public Reserva() {
     }
 
-    public Reserva(Long id_reserva, Long id_sala, Long id_usuario, LocalDate fecha_inicio_reserva,
-            LocalDate fecha_fin_reserva, StatusReserva estatus_reserva) {
-        this.id_reserva = id_reserva;
-        this.id_sala = id_sala;
-        this.id_usuario = id_usuario;
-        this.fecha_inicio_reserva = fecha_inicio_reserva;
-        this.fecha_fin_reserva = fecha_fin_reserva;
-        this.estatus_reserva = estatus_reserva;
-    }
-
-    public Reserva(Long id_sala, Long id_usuario, LocalDate fecha_inicio_reserva, LocalDate fecha_fin_reserva,
-            StatusReserva estatus_reserva) {
-        this.id_sala = id_sala;
-        this.id_usuario = id_usuario;
-        this.fecha_inicio_reserva = fecha_inicio_reserva;
-        this.fecha_fin_reserva = fecha_fin_reserva;
-        this.estatus_reserva = estatus_reserva;
-    }
 
     public Long getId_reserva() {
         return id_reserva;
