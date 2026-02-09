@@ -1,10 +1,13 @@
 package com.jesus.reservasalasapi.mapper;
 
+import org.springframework.stereotype.Component;
+
 import com.jesus.reservasalasapi.dto.reserva.ReservaRequestDTO;
 import com.jesus.reservasalasapi.dto.reserva.ReservaResponseDTO;
 import com.jesus.reservasalasapi.modelo.Reserva;
 import com.jesus.reservasalasapi.modelo.StatusReserva;
 
+@Component // Anotación para que Spring gestione esta clase como un componente, permitiendo su inyección en otros lugares.
 public class ReservaMapper {
 
     public Reserva toEntity(ReservaRequestDTO dto) {
