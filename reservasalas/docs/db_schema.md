@@ -93,6 +93,52 @@ En esta tarea no se añaden nuevas tablas, pero sí se aplican reglas de negocio
 - No se crean nuevas tablas.
 - Se añade lógica de negocio en el servicio para validar reglas antes de insertar o actualizar datos.
 
+--------------------------------------------------
+
+# TAREA 7 — Resto del CRUD
+En esta tarea se completan las operaciones de:
+- Obtener por ID
+- Editar
+- Borrar
+
+## Cambios en la base de datos
+**No se realizan cambios en el esquema.**  
+La estructura de tablas sigue siendo exactamente la misma que en tareas anteriores.
+
+## Cambios lógicos aplicados
+- Validación de fechas al editar.
+- Validación de solapamientos al editar.
+- Gestión de errores:
+  - **404** → reserva inexistente
+  - **400** → fechas inválidas
+  - **409** → solapamiento
+- Asignación automática del estado inicial `PENDIENTE` al crear una reserva (lógica en el servicio, no en la base de datos).
+
+# ESTADO FINAL DEL ESQUEMA (TAREA 7)
+
+El modelo de datos definitivo queda así:
+
+### Tabla: salas
+- `id_sala` (PK)
+- `nombre_sala`
+- `capacidad_sala`
+
+### Tabla: usuarios
+- `id_usuario` (PK)
+- `nombre_usuario`
+- `email_usuario`
+
+### Tabla: reservas
+- `id_reserva` (PK)
+- `id_sala` (FK)
+- `id_usuario` (FK)
+- `fecha_inicio_reserva`
+- `fecha_fin_reserva`
+- `estatus_reserva` (ENUM: PENDIENTE, CONFIRMADA, CANCELADA)
+
+--------------------------------------------------
+
+
 
 
 

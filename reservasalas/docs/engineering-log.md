@@ -7,16 +7,22 @@
 - Preparación de la estructura mínima del proyecto.
 - Uso de IA: organización del flujo de trabajo y aclaración de pasos.
 
+--------------------------------------------------
+
 ## TAREA 1 — Diseño de base de datos y endpoints
 - Se definieron las tablas: salas, usuarios y reservas.
 - Se documentaron los endpoints para salas, usuarios y reservas.
 - Se creó la documentación en los archivos db_schema.md y api_endpoints.md.
+
+--------------------------------------------------
 
 ## TAREA 2 — Arranque técnico
 - Se configuró la conexión a la base de datos.
 - Se verificó que la aplicación arranca sin errores.
 - Se creó el endpoint de salud GET /health para comprobar el estado del servicio.
 - Se comprobó que el endpoint responde correctamente con código 200.
+
+--------------------------------------------------
 
 ## TAREA 3 — Modelo de dominio
 - Se implementaron las entidades JPA: Sala, Usuario, Reserva y el enum StatusReserva.
@@ -27,6 +33,8 @@
 - Los repositorios proporcionan automáticamente operaciones CRUD gracias a JpaRepository.
 - No se crearon controllers ni lógica de negocio, cumpliendo las restricciones de la tarea.
 
+--------------------------------------------------
+
 ## TAREA 4 — DTOs y validaciones
 - Se crearon DTOs de request y response para las entidades Sala, Usuario y Reserva.
 - Los DTOs permiten separar la capa de API del modelo de dominio.
@@ -34,6 +42,8 @@
 - Se implementaron mappers manuales para convertir entre entidades y DTOs.
 - Se garantizó que ningún controller devuelve entidades JPA directamente.
 - Se mantuvo la lógica de validación fuera de las entidades, cumpliendo buenas prácticas.
+
+--------------------------------------------------
 
 ## TAREA 5 — CRUD básico (listar + crear)
 - Se implementaron controllers mínimos para las entidades principales.
@@ -46,6 +56,8 @@
   - 200 OK para operaciones de listado.
   - 201 CREATED para operaciones de creación.
 - Se validó el correcto funcionamiento del flujo completo de la API.
+
+--------------------------------------------------
 
 ## TAREA 6 — Reglas de negocio específicas
 Se implementaron reglas de negocio avanzadas en el servicio de reservas, con el objetivo de garantizar la coherencia de los datos y el correcto flujo del ciclo de vida de una reserva.
@@ -67,4 +79,32 @@ Se implementaron reglas de negocio avanzadas en el servicio de reservas, con el 
   - Reservas inexistentes
 - Se realizaron pruebas manuales en Postman para validar todos los casos borde.
 - Se verificó en la base de datos (H2) que los estados y las reglas de negocio se aplican correctamente.
+
+--------------------------------------------------
+
+## TAREA 7 — Resto del CRUD (obtener, editar, borrar)
+En esta tarea se completa el CRUD de reservas añadiendo los endpoints restantes y gestionando correctamente los errores.
+
+### Funcionalidades implementadas
+- Implementación del endpoint `GET /reservas/{id}` para obtener una reserva por ID.
+- Implementación del endpoint `PUT /reservas/{id}` para editar una reserva existente.
+- Implementación del endpoint `DELETE /reservas/{id}` para eliminar una reserva.
+- Asignación automática del estado inicial `PENDIENTE` al crear una reserva (evitando errores de columna nula).
+
+### Validaciones aplicadas al editar
+- Fechas válidas (**inicio < fin**).
+- No solapamiento con otras reservas.
+- Reserva existente.
+
+### Gestión de errores
+- **404 Not Found** → reserva inexistente.
+- **400 Bad Request** → fechas inválidas.
+- **409 Conflict** → solapamiento.
+
+### Pruebas y verificación
+- Pruebas completas en Postman y verificación en H2 Console.
+- Confirmación de que todas las operaciones CRUD funcionan correctamente.
+
+--------------------------------------------------
+
 

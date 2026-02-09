@@ -28,6 +28,7 @@ public class ReservaServicio {
         return reservaRepositorio.findAll().stream().map(reservaMapper::toResponse).collect(Collectors.toList());
     }
 
+    // Crear reserva con validaciones de negocio
     public ReservaResponseDTO crearReserva(ReservaRequestDTO dto) {
 
         // Validaciones
@@ -52,10 +53,12 @@ public class ReservaServicio {
         }
 
         var reserva = reservaMapper.toEntity(dto);
+        reserva.setEstatus_reserva(StatusReserva.PENDIENTE);
         var guardada = reservaRepositorio.save(reserva);
         return reservaMapper.toResponse(guardada);
     }
 
+    // Confirmar reserva: cambia el estatus a CONFIRMADA
     public ReservaResponseDTO confirmar(Long id) {
         Reserva reserva = reservaRepositorio.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("No existe la reserva"));
@@ -64,12 +67,68 @@ public class ReservaServicio {
         return reservaMapper.toResponse(guardada);
     }
 
+    // Cancelar reserva: cambia el estatus a CANCELADA
     public ReservaResponseDTO cancelar(Long id) {
         Reserva reserva = reservaRepositorio.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("No existe la reserva"));
         reserva.setEstatus_reserva(StatusReserva.CANCELADA);
         Reserva guardada = reservaRepositorio.save(reserva);
         return reservaMapper.toResponse(guardada);
+    }
+
+    // Obtener reserva por ID
+    public ReservaResponseDTO obtenerPorId(Long id) {
+        Reserva reserva = reservaRepositorio.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Reserva no encontrada"));
+        return reservaMapper.toResponse(reserva);
+    }
+
+    // Editar reserva con validaciones de negocio
+    public ReservaResponseDTO editar(Long id, ReservaRequestDTO dto) {
+        Reserva reserva = reservaRepositorio.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Reserva no encontrada"));
+
+        // Validaciones de negocio (fechas, solapamientos, etc.)
+        validarFechas(dto);
+        validarSolapamientos(id, dto);
+
+        reserva.setId_sala(dto.getSala_id());
+        reserva.setId_usuario(dto.getUsuario_id());
+        reserva.setFecha_inicio_reserva(dto.getReserva_fecha_inicio());
+        reserva.setFecha_fin_reserva(dto.getReserva_fecha_fin());
+
+        reservaRepositorio.save(reserva);
+        return reservaMapper.toResponse(reserva);
+    }
+
+    // Validación de fechas
+    public void borrar(Long id) {
+        if (!reservaRepositorio.existsById(id)) {
+            throw new IllegalArgumentException("Reserva no encontrada");
+        }
+        reservaRepositorio.deleteById(id);
+    }
+
+    // Validación de fechas
+    private void validarFechas(ReservaRequestDTO dto) {
+        if (dto.getReserva_fecha_inicio() == null || dto.getReserva_fecha_fin() == null) {
+            throw new IllegalArgumentException("Las fechas de inicio y fin son obligatorias");
+        }
+
+        if (!dto.getReserva_fecha_inicio().isBefore(dto.getReserva_fecha_fin())) {
+            throw new IllegalArgumentException("La fecha de inicio debe ser anterior a la fecha de fin");
+        }
+    }
+
+    // Validación de solapamientos
+    private void validarSolapamientos(Long id, ReservaRequestDTO dto) {
+        var solapadas = reservaRepositorio.buscarSolapadas(
+                dto.getSala_id(),
+                dto.getReserva_fecha_fin(),
+                dto.getReserva_fecha_inicio());
+        if (!solapadas.isEmpty()) {
+            throw new IllegalArgumentException("Ya existe una reserva en esa sala para ese rango de fechas");
+        }
     }
 
 }
