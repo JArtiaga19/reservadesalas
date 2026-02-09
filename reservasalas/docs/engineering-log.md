@@ -107,4 +107,31 @@ En esta tarea se completa el CRUD de reservas añadiendo los endpoints restantes
 
 --------------------------------------------------
 
+## TAREA 8 — Manejo global de errores
+En esta tarea se implementa un sistema profesional de gestión de errores centralizado mediante **excepciones personalizadas** y un `@ControllerAdvice`.
 
+### Funcionalidades implementadas
+- **Creación de excepciones personalizadas:**
+  - `ReservaNoEncontradaException`
+  - `ReservaSolapadaException`
+  - `FechasInvalidasException`
+- **Implementación de un manejador global de errores** (`GlobalExceptionHandler`) con:
+  - Respuestas JSON uniformes
+  - Códigos HTTP coherentes
+  - Mensajes claros y consistentes
+- Sustitución de todos los `IllegalArgumentException` por **excepciones específicas**.
+- Integración del manejo global en **todos los métodos** del servicio de reservas.
+
+### Pruebas realizadas
+- Prueba de fechas inválidas → **400 Bad Request**
+- Prueba de fechas nulas → **400 Bad Request**
+- Prueba de solapamiento → **409 Conflict**
+- Prueba de reserva inexistente (GET) → **404 Not Found**
+- Prueba de borrado inexistente → **404 Not Found**
+- Prueba de error general → **500 Internal Server Error**
+
+### Resultado
+- La API responde de forma **consistente y profesional** ante cualquier error.
+- El comportamiento es **predecible, claro y adecuado** para entornos reales.
+
+--------------------------------------------------

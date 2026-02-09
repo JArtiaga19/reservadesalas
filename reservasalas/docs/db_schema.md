@@ -138,7 +138,45 @@ El modelo de datos definitivo queda así:
 
 --------------------------------------------------
 
+# TAREA 8 — Manejo global de errores
+## Objetivo
+Mejorar el comportamiento de la API mediante un **sistema centralizado de gestión de errores**, sin modificar el esquema de la base de datos ni los tipos de datos existentes.
 
+## Cambios lógicos aplicados
+1. **Creación de excepciones personalizadas**
+   - `ReservaNoEncontradaException`
+   - `ReservaSolapadaException`
+   - `FechasInvalidasException`
+
+2. **Implementación de manejador global de errores**
+   - Uso de `@ControllerAdvice` para capturar excepciones en toda la API.
+   - Respuestas de error **uniformes en formato JSON**.
+
+3. **Restricciones**
+   - No se añaden columnas ni tablas nuevas.
+   - No se modifican tipos de datos.
+   - Toda la gestión de errores se realiza a nivel de servicio y controlador.
+
+## Estado final del esquema (TAREA 8)
+### Tabla: salas
+- `id_sala` (PK)
+- `nombre_sala`
+- `capacidad_sala`
+
+### Tabla: usuarios
+- `id_usuario` (PK)
+- `nombre_usuario`
+- `email_usuario`
+
+### Tabla: reservas
+- `id_reserva` (PK)
+- `id_sala` (FK)
+- `id_usuario` (FK)
+- `fecha_inicio_reserva`
+- `fecha_fin_reserva`
+- `estatus_reserva` (ENUM: `PENDIENTE`, `CONFIRMADA`, `CANCELADA`)
+
+--------------------------------------------------
 
 
 

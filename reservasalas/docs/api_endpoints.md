@@ -158,5 +158,33 @@ Elimina una reserva.
 
 --------------------------------------------------
 
+# TAREA 8 — Manejo global de errores
+En esta tarea se implementa un sistema profesional de gestión de errores mediante **excepciones personalizadas** y un **manejador global**.
 
+## Nuevos componentes añadidos en la TAREA 8
+- **Excepciones personalizadas:**
+  - `ReservaNoEncontradaException`
+  - `ReservaSolapadaException`
+  - `FechasInvalidasException`
+- **Manejador global de errores** con `@ControllerAdvice`.
+- Respuestas de error uniformes en formato **JSON**.
 
+## Comportamiento de errores por endpoint
+### 400 Bad Request
+- Fechas inválidas en creación o edición de reservas.
+
+### 404 Not Found
+- Reserva no encontrada en los endpoints:
+  - `GET /reservas/{id}`
+  - `PUT /reservas/{id}`
+  - `DELETE /reservas/{id}`
+  - `PUT /reservas/{id}/confirmar`
+  - `PUT /reservas/{id}/cancelar`
+
+### 409 Conflict
+- Intento de crear o editar una reserva que genera **solapamiento**.
+
+### 500 Internal Server Error
+- Cualquier error no controlado por las **excepciones personalizadas**.
+
+--------------------------------------------------

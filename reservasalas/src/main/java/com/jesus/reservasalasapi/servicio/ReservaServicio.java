@@ -13,6 +13,10 @@ import com.jesus.reservasalasapi.repositorio.Repositorio_Reserva;
 import com.jesus.reservasalasapi.modelo.Reserva;
 import com.jesus.reservasalasapi.modelo.StatusReserva;
 
+import com.jesus.reservasalasapi.excepciones.FechasInvalidasException;
+import com.jesus.reservasalasapi.excepciones.ReservaNoEncontradaException;
+import com.jesus.reservasalasapi.excepciones.ReservaSolapadaException;
+
 @Service // Anotación para indicar que esta clase es un servicio de Spring
 public class ReservaServicio {
 
@@ -24,71 +28,77 @@ public class ReservaServicio {
         this.reservaMapper = reservaMapper;
     }
 
+    // Listar todas las reservas
     public List<ReservaResponseDTO> listarReservas() {
-        return reservaRepositorio.findAll().stream().map(reservaMapper::toResponse).collect(Collectors.toList());
+        return reservaRepositorio.findAll()
+                .stream()
+                .map(reservaMapper::toResponse)
+                .collect(Collectors.toList());
     }
 
     // Crear reserva con validaciones de negocio
     public ReservaResponseDTO crearReserva(ReservaRequestDTO dto) {
 
-        // Validaciones
         if (dto.getReserva_fecha_inicio() == null || dto.getReserva_fecha_fin() == null) {
-            throw new IllegalArgumentException("Las fechas de inicio y fin son obligatorias");
+            throw new FechasInvalidasException();
         }
+
         if (!dto.getReserva_fecha_inicio().isBefore(dto.getReserva_fecha_fin())) {
-            throw new IllegalArgumentException("La fecha de inicio debe ser anterior a la fecha de fin");
+            throw new FechasInvalidasException();
         }
 
-        // Regla de negocio: no permitir solapamiento en la misma sala
-        var reservasSolapadas = reservaRepositorio.buscarSolapadas(dto.getSala_id(), dto.getReserva_fecha_fin(),
-                dto.getReserva_fecha_inicio());
+        var reservasSolapadas = reservaRepositorio.buscarSolapadas(
+                dto.getSala_id(),
+                dto.getReserva_fecha_fin(),
+                dto.getReserva_fecha_inicio()
+        );
         if (!reservasSolapadas.isEmpty()) {
-            throw new IllegalArgumentException("Ya existe una reserva en esa sala para ese rango de fechas");
+            throw new ReservaSolapadaException();
         }
 
-        // Validación adicional para asegurar que la fecha de fin no sea anterior a la
-        // fecha de inicio
-        if (dto.getReserva_fecha_fin().isBefore(dto.getReserva_fecha_inicio())) {
-            throw new IllegalArgumentException("La fecha de fin no puede ser anterior a la fecha de inicio");
-        }
-
+        // Crear entidad y asignar estado inicial
         var reserva = reservaMapper.toEntity(dto);
         reserva.setEstatus_reserva(StatusReserva.PENDIENTE);
+
         var guardada = reservaRepositorio.save(reserva);
         return reservaMapper.toResponse(guardada);
     }
 
-    // Confirmar reserva: cambia el estatus a CONFIRMADA
+    // Confirmar reserva
     public ReservaResponseDTO confirmar(Long id) {
         Reserva reserva = reservaRepositorio.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("No existe la reserva"));
+                .orElseThrow(() -> new ReservaNoEncontradaException(id));
+
         reserva.setEstatus_reserva(StatusReserva.CONFIRMADA);
         Reserva guardada = reservaRepositorio.save(reserva);
+
         return reservaMapper.toResponse(guardada);
     }
 
-    // Cancelar reserva: cambia el estatus a CANCELADA
+    // Cancelar reserva
     public ReservaResponseDTO cancelar(Long id) {
         Reserva reserva = reservaRepositorio.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("No existe la reserva"));
+                .orElseThrow(() -> new ReservaNoEncontradaException(id));
+
         reserva.setEstatus_reserva(StatusReserva.CANCELADA);
         Reserva guardada = reservaRepositorio.save(reserva);
+
         return reservaMapper.toResponse(guardada);
     }
 
     // Obtener reserva por ID
     public ReservaResponseDTO obtenerPorId(Long id) {
         Reserva reserva = reservaRepositorio.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Reserva no encontrada"));
+                .orElseThrow(() -> new ReservaNoEncontradaException(id));
+
         return reservaMapper.toResponse(reserva);
     }
 
-    // Editar reserva con validaciones de negocio
+    // Editar reserva
     public ReservaResponseDTO editar(Long id, ReservaRequestDTO dto) {
         Reserva reserva = reservaRepositorio.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Reserva no encontrada"));
+                .orElseThrow(() -> new ReservaNoEncontradaException(id));
 
-        // Validaciones de negocio (fechas, solapamientos, etc.)
         validarFechas(dto);
         validarSolapamientos(id, dto);
 
@@ -101,10 +111,10 @@ public class ReservaServicio {
         return reservaMapper.toResponse(reserva);
     }
 
-    // Validación de fechas
+    // Borrar reserva
     public void borrar(Long id) {
         if (!reservaRepositorio.existsById(id)) {
-            throw new IllegalArgumentException("Reserva no encontrada");
+            throw new ReservaNoEncontradaException(id);
         }
         reservaRepositorio.deleteById(id);
     }
@@ -112,11 +122,10 @@ public class ReservaServicio {
     // Validación de fechas
     private void validarFechas(ReservaRequestDTO dto) {
         if (dto.getReserva_fecha_inicio() == null || dto.getReserva_fecha_fin() == null) {
-            throw new IllegalArgumentException("Las fechas de inicio y fin son obligatorias");
+            throw new FechasInvalidasException();
         }
-
         if (!dto.getReserva_fecha_inicio().isBefore(dto.getReserva_fecha_fin())) {
-            throw new IllegalArgumentException("La fecha de inicio debe ser anterior a la fecha de fin");
+            throw new FechasInvalidasException();
         }
     }
 
@@ -125,12 +134,12 @@ public class ReservaServicio {
         var solapadas = reservaRepositorio.buscarSolapadas(
                 dto.getSala_id(),
                 dto.getReserva_fecha_fin(),
-                dto.getReserva_fecha_inicio());
+                dto.getReserva_fecha_inicio()
+        );
         if (!solapadas.isEmpty()) {
-            throw new IllegalArgumentException("Ya existe una reserva en esa sala para ese rango de fechas");
+            throw new ReservaSolapadaException();
         }
     }
-
 }
 
 /*
