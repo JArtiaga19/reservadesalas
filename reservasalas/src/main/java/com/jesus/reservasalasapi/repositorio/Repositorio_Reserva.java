@@ -16,7 +16,7 @@ public interface Repositorio_Reserva extends JpaRepository<Reserva, Long> {
         WHERE r.id_sala = :idSala
         AND r.fecha_inicio_reserva <= :fechaFin
         AND r.fecha_fin_reserva >= :fechaInicio
-    """)
+    """) // Consulta JPQL para encontrar reservas que se solapen en una misma sala
     
     // Buscar reservas que se solapen en una misma sala
     List<Reserva> buscarSolapadas(

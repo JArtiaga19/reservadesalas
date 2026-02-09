@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.jesus.reservasalasapi.modelo.Sala;
 
 public interface Repositorio_Sala extends JpaRepository<Sala, Long> {
-    
+    //se queda vacio, pero no es necesario agregar nada, con esto ya tienes acceso a todos los metodos CRUD de JpaRepository
 }
 
 /*

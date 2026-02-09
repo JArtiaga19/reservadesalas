@@ -18,11 +18,13 @@ import com.jesus.reservasalasapi.excepciones.ReservaNoEncontradaException;
 import com.jesus.reservasalasapi.excepciones.ReservaSolapadaException;
 
 @Service // Anotación para indicar que esta clase es un servicio de Spring
+// Inyección de dependencias del repositorio y el mapper
 public class ReservaServicio {
 
     private final Repositorio_Reserva reservaRepositorio;
     private final ReservaMapper reservaMapper;
 
+    // Constructor para inyectar dependencias
     public ReservaServicio(Repositorio_Reserva reservaRepositorio, ReservaMapper reservaMapper) {
         this.reservaRepositorio = reservaRepositorio;
         this.reservaMapper = reservaMapper;
