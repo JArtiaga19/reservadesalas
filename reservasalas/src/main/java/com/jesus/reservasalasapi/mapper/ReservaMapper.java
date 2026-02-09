@@ -20,7 +20,7 @@ public class ReservaMapper {
         reserva.setFecha_fin_reserva(dto.getReserva_fecha_fin()); 
         
         // Estado inicial por defecto
-        reserva.setEstatus_reserva(StatusReserva.PENDING);
+        reserva.setEstatus_reserva(dto.getEstatus_reserva());
         return reserva;
     }
 

@@ -2,6 +2,8 @@ package com.jesus.reservasalasapi.dto.reserva;
 
 import java.time.LocalDate;
 
+import com.jesus.reservasalasapi.modelo.StatusReserva;
+
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 
@@ -20,6 +22,9 @@ public class ReservaRequestDTO {
     @NotNull(message = "La fecha de fin de la reserva es obligatoria")
     @FutureOrPresent(message = "La fecha de fin debe ser hoy o una fecha futura")
     private LocalDate reserva_fecha_fin;
+
+    @NotNull(message = "El estatus de la reserva es obligatorio")
+    private StatusReserva estatus_reserva;
 
     public Long getSala_id() {
         return sala_id;
@@ -53,8 +58,13 @@ public class ReservaRequestDTO {
         this.reserva_fecha_fin = reserva_fecha_fin;
     }
 
-    
+    public StatusReserva getEstatus_reserva() {
+        return estatus_reserva;
+    }
 
+    public void setEstatus_reserva(StatusReserva estatus_reserva) {
+        this.estatus_reserva = estatus_reserva;
+    }
 }
 
 /*

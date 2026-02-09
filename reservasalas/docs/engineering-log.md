@@ -27,6 +27,44 @@
 - Los repositorios proporcionan automáticamente operaciones CRUD gracias a JpaRepository.
 - No se crearon controllers ni lógica de negocio, cumpliendo las restricciones de la tarea.
 
+## TAREA 4 — DTOs y validaciones
+- Se crearon DTOs de request y response para las entidades Sala, Usuario y Reserva.
+- Los DTOs permiten separar la capa de API del modelo de dominio.
+- Se añadieron validaciones mediante Bean Validation (`@NotNull`, `@NotBlank`, etc.) en los DTOs de entrada.
+- Se implementaron mappers manuales para convertir entre entidades y DTOs.
+- Se garantizó que ningún controller devuelve entidades JPA directamente.
+- Se mantuvo la lógica de validación fuera de las entidades, cumpliendo buenas prácticas.
 
+## TAREA 5 — CRUD básico (listar + crear)
+- Se implementaron controllers mínimos para las entidades principales.
+- Se respetó el orden obligatorio de implementación: primero listar y luego crear.
+- Se crearon services con la lógica básica de negocio.
+- Los services se encargan de interactuar con los repositorios JPA.
+- Los endpoints de listado devuelven colecciones de DTOs.
+- Los endpoints de creación reciben DTOs de request y devuelven DTOs de response.
+- Se devolvieron respuestas HTTP correctas:
+  - 200 OK para operaciones de listado.
+  - 201 CREATED para operaciones de creación.
+- Se validó el correcto funcionamiento del flujo completo de la API.
 
+## TAREA 6 — Reglas de negocio específicas
+Se implementaron reglas de negocio avanzadas en el servicio de reservas, con el objetivo de garantizar la coherencia de los datos y el correcto flujo del ciclo de vida de una reserva.
+
+### Funcionalidades implementadas
+- Se implementaron validaciones de negocio avanzadas en el servicio de reservas.
+- Se añadió la comprobación de solapamientos entre reservas mediante una consulta específica al repositorio.
+- Se validó que la fecha de inicio sea anterior a la fecha de fin.
+- Se añadió la lógica para gestionar el ciclo de vida de la reserva mediante los estados:
+  - PENDIENTE
+  - CONFIRMADA
+  - CANCELADA
+- Se implementaron dos nuevos endpoints:
+  - `PUT /reservas/{id}/confirmar`
+  - `PUT /reservas/{id}/cancelar`
+- Se añadieron mensajes de error claros para:
+  - Fechas inválidas
+  - Solapamientos de reservas
+  - Reservas inexistentes
+- Se realizaron pruebas manuales en Postman para validar todos los casos borde.
+- Se verificó en la base de datos (H2) que los estados y las reglas de negocio se aplican correctamente.
 

@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,6 +34,16 @@ public class ReservaControlador {
     public ResponseEntity<ReservaResponseDTO> crear(@RequestBody ReservaRequestDTO dto) {
         ReservaResponseDTO creada = reservaServicio.crearReserva(dto);
         return ResponseEntity.status(201).body(creada);
+    }
+
+    @PutMapping("/{id}/confirmar")
+    public ReservaResponseDTO confirmar(@PathVariable Long id) {
+        return reservaServicio.confirmar(id);
+    }
+
+    @PutMapping("/{id}/cancelar")
+    public ReservaResponseDTO cancelar(@PathVariable Long id) {
+        return reservaServicio.cancelar(id);
     }
 }
 

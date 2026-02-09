@@ -49,10 +49,6 @@ public class ReservaResponseDTO {
     public void setEstatusReserva(StatusReserva estatusReserva) {
         this.estatusReserva = estatusReserva;
     }
-
-    
-
-    
 }
 
 /*
