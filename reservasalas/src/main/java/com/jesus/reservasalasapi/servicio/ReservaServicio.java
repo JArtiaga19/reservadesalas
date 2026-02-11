@@ -1,5 +1,6 @@
 package com.jesus.reservasalasapi.servicio;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,19 +42,26 @@ public class ReservaServicio {
     // Crear reserva con validaciones de negocio
     public ReservaResponseDTO crearReserva(ReservaRequestDTO dto) {
 
+        // Validación añadida: no permitir fechas nulas
         if (dto.getReserva_fecha_inicio() == null || dto.getReserva_fecha_fin() == null) {
             throw new FechasInvalidasException();
         }
 
+        // Validación añadida: la fecha de inicio debe ser anterior a la fecha de fin
         if (!dto.getReserva_fecha_inicio().isBefore(dto.getReserva_fecha_fin())) {
             throw new FechasInvalidasException();
         }
 
+        // Validación añadida: no permitir reservar en fechas pasadas
+        if (dto.getReserva_fecha_inicio().isBefore(LocalDate.now())) {
+            throw new FechasInvalidasException("No puedes reservar en una fecha pasada");
+        }
+
+        // Validación añadida: no permitir solapamientos de reservas para la misma sala
         var reservasSolapadas = reservaRepositorio.buscarSolapadas(
                 dto.getSala_id(),
                 dto.getReserva_fecha_fin(),
-                dto.getReserva_fecha_inicio()
-        );
+                dto.getReserva_fecha_inicio());
         if (!reservasSolapadas.isEmpty()) {
             throw new ReservaSolapadaException();
         }
@@ -136,8 +144,7 @@ public class ReservaServicio {
         var solapadas = reservaRepositorio.buscarSolapadas(
                 dto.getSala_id(),
                 dto.getReserva_fecha_fin(),
-                dto.getReserva_fecha_inicio()
-        );
+                dto.getReserva_fecha_inicio());
         if (!solapadas.isEmpty()) {
             throw new ReservaSolapadaException();
         }

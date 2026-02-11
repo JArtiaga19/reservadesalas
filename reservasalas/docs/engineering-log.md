@@ -426,7 +426,7 @@ Configuré la base de datos y probé la conexión.
 
 --------------------------------------------------
 
---------------------------------------------------
+
 
 # Engineering Log
 
@@ -507,6 +507,7 @@ Se implementaron reglas de negocio avanzadas en el servicio de reservas, con el 
   - Fechas inválidas
   - Solapamientos de reservas
   - Reservas inexistentes
+  - Que la fecha solo pueda ser de la actual a mas adelante, nunca una que haya sido ya
 - Se realizaron pruebas manuales en Postman para validar todos los casos borde.
 - Se verificó en la base de datos (H2) que los estados y las reglas de negocio se aplican correctamente.
 
