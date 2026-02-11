@@ -1,6 +1,7 @@
 package com.jesus.reservasalasapi.servicio;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,6 +11,9 @@ import com.jesus.reservasalasapi.dto.reserva.ReservaRequestDTO;
 import com.jesus.reservasalasapi.dto.reserva.ReservaResponseDTO;
 import com.jesus.reservasalasapi.mapper.ReservaMapper;
 import com.jesus.reservasalasapi.repositorio.Repositorio_Reserva;
+import com.jesus.reservasalasapi.repositorio.Repositorio_Sala;
+import com.jesus.reservasalasapi.repositorio.Repositorio_Usuario;
+import com.jesus.reservasalasapi.excepciones.SalaNoEncontradaException;
 
 import com.jesus.reservasalasapi.modelo.Reserva;
 import com.jesus.reservasalasapi.modelo.StatusReserva;
@@ -17,6 +21,8 @@ import com.jesus.reservasalasapi.modelo.StatusReserva;
 import com.jesus.reservasalasapi.excepciones.FechasInvalidasException;
 import com.jesus.reservasalasapi.excepciones.ReservaNoEncontradaException;
 import com.jesus.reservasalasapi.excepciones.ReservaSolapadaException;
+import com.jesus.reservasalasapi.excepciones.UsuarioNoEncontradoException;
+import com.jesus.reservasalasapi.excepciones.ValidacionMultipleException;
 
 @Service // Anotación para indicar que esta clase es un servicio de Spring
 // Inyección de dependencias del repositorio y el mapper
@@ -24,11 +30,16 @@ public class ReservaServicio {
 
     private final Repositorio_Reserva reservaRepositorio;
     private final ReservaMapper reservaMapper;
+    private final Repositorio_Sala salaRepositorio;
+    private final Repositorio_Usuario usuarioRepositorio;
 
     // Constructor para inyectar dependencias
-    public ReservaServicio(Repositorio_Reserva reservaRepositorio, ReservaMapper reservaMapper) {
+    public ReservaServicio(Repositorio_Reserva reservaRepositorio, ReservaMapper reservaMapper,
+            Repositorio_Sala salaRepositorio, Repositorio_Usuario usuarioRepositorio) {
         this.reservaRepositorio = reservaRepositorio;
         this.reservaMapper = reservaMapper;
+        this.salaRepositorio = salaRepositorio;
+        this.usuarioRepositorio = usuarioRepositorio;
     }
 
     // Listar todas las reservas
@@ -41,6 +52,35 @@ public class ReservaServicio {
 
     // Crear reserva con validaciones de negocio
     public ReservaResponseDTO crearReserva(ReservaRequestDTO dto) {
+
+        // Esto iria con SalaNoEncontradaException.java y UsuarioNoEncontradoException.java
+        /*
+         * // Validar que la sala existe
+         * salaRepositorio.findById(dto.getSala_id())
+         * .orElseThrow(() -> new SalaNoEncontradaException(dto.getSala_id()));
+         * 
+         * // Validar que el usuario existe
+         * usuarioRepositorio.findById(dto.getUsuario_id())
+         * .orElseThrow(() -> new UsuarioNoEncontradoException(dto.getUsuario_id()));
+         */
+
+        // Validación mejorada: acumular errores en lugar de lanzar la primera excepción que se encuentra, este va con ValidacionMultipleException.java
+        List<String> errores = new ArrayList<>();
+
+        // Validar sala
+        if (!salaRepositorio.existsById(dto.getSala_id())) {
+            errores.add("La sala con ID " + dto.getSala_id() + " no existe");
+        }
+
+        // Validar usuario
+        if (!usuarioRepositorio.existsById(dto.getUsuario_id())) {
+            errores.add("El usuario con ID " + dto.getUsuario_id() + " no existe");
+        }
+
+        // Si hay errores, lanzar excepción múltiple
+        if (!errores.isEmpty()) {
+            throw new ValidacionMultipleException(errores);
+        }
 
         // Validación añadida: no permitir fechas nulas
         if (dto.getReserva_fecha_inicio() == null || dto.getReserva_fecha_fin() == null) {

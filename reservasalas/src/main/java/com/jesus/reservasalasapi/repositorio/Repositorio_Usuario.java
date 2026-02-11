@@ -1,9 +1,11 @@
 package com.jesus.reservasalasapi.repositorio;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.jesus.reservasalasapi.modelo.Sala;
+import com.jesus.reservasalasapi.modelo.Usuario;
+import com.jesus.reservasalasapi.repositorio.Repositorio_Usuario;
 
-public interface Repositorio_Usuario extends JpaRepository<Sala, Long> {
+
+public interface Repositorio_Usuario extends JpaRepository<Usuario, Long> {
     //se queda vacio, pero no es necesario agregar nada, con esto ya tienes acceso a todos los metodos CRUD de JpaRepository
 }
 
