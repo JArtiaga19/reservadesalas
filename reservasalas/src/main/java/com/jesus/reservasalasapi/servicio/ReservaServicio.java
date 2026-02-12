@@ -13,19 +13,12 @@ import com.jesus.reservasalasapi.mapper.ReservaMapper;
 import com.jesus.reservasalasapi.repositorio.Repositorio_Reserva;
 import com.jesus.reservasalasapi.repositorio.Repositorio_Sala;
 import com.jesus.reservasalasapi.repositorio.Repositorio_Usuario;
-import com.jesus.reservasalasapi.excepciones.SalaNoEncontradaException;
+import com.jesus.reservasalasapi.excepciones.*;
 
 import com.jesus.reservasalasapi.modelo.Reserva;
 import com.jesus.reservasalasapi.modelo.StatusReserva;
 
-import com.jesus.reservasalasapi.excepciones.FechasInvalidasException;
-import com.jesus.reservasalasapi.excepciones.ReservaNoEncontradaException;
-import com.jesus.reservasalasapi.excepciones.ReservaSolapadaException;
-import com.jesus.reservasalasapi.excepciones.UsuarioNoEncontradoException;
-import com.jesus.reservasalasapi.excepciones.ValidacionMultipleException;
-
-@Service // Anotación para indicar que esta clase es un servicio de Spring
-// Inyección de dependencias del repositorio y el mapper
+@Service
 public class ReservaServicio {
 
     private final Repositorio_Reserva reservaRepositorio;
@@ -33,7 +26,6 @@ public class ReservaServicio {
     private final Repositorio_Sala salaRepositorio;
     private final Repositorio_Usuario usuarioRepositorio;
 
-    // Constructor para inyectar dependencias
     public ReservaServicio(Repositorio_Reserva reservaRepositorio, ReservaMapper reservaMapper,
             Repositorio_Sala salaRepositorio, Repositorio_Usuario usuarioRepositorio) {
         this.reservaRepositorio = reservaRepositorio;
@@ -53,60 +45,41 @@ public class ReservaServicio {
     // Crear reserva con validaciones de negocio
     public ReservaResponseDTO crearReserva(ReservaRequestDTO dto) {
 
-        // Esto iria con SalaNoEncontradaException.java y UsuarioNoEncontradoException.java
-        /*
-         * // Validar que la sala existe
-         * salaRepositorio.findById(dto.getSala_id())
-         * .orElseThrow(() -> new SalaNoEncontradaException(dto.getSala_id()));
-         * 
-         * // Validar que el usuario existe
-         * usuarioRepositorio.findById(dto.getUsuario_id())
-         * .orElseThrow(() -> new UsuarioNoEncontradoException(dto.getUsuario_id()));
-         */
-
-        // Validación mejorada: acumular errores en lugar de lanzar la primera excepción que se encuentra, este va con ValidacionMultipleException.java
         List<String> errores = new ArrayList<>();
 
-        // Validar sala
         if (!salaRepositorio.existsById(dto.getSala_id())) {
             errores.add("La sala con ID " + dto.getSala_id() + " no existe");
         }
 
-        // Validar usuario
         if (!usuarioRepositorio.existsById(dto.getUsuario_id())) {
             errores.add("El usuario con ID " + dto.getUsuario_id() + " no existe");
         }
 
-        // Si hay errores, lanzar excepción múltiple
         if (!errores.isEmpty()) {
             throw new ValidacionMultipleException(errores);
         }
 
-        // Validación añadida: no permitir fechas nulas
         if (dto.getReserva_fecha_inicio() == null || dto.getReserva_fecha_fin() == null) {
             throw new FechasInvalidasException();
         }
 
-        // Validación añadida: la fecha de inicio debe ser anterior a la fecha de fin
         if (!dto.getReserva_fecha_inicio().isBefore(dto.getReserva_fecha_fin())) {
             throw new FechasInvalidasException();
         }
 
-        // Validación añadida: no permitir reservar en fechas pasadas
         if (dto.getReserva_fecha_inicio().isBefore(LocalDate.now())) {
             throw new FechasInvalidasException("No puedes reservar en una fecha pasada");
         }
 
-        // Validación añadida: no permitir solapamientos de reservas para la misma sala
         var reservasSolapadas = reservaRepositorio.buscarSolapadas(
                 dto.getSala_id(),
                 dto.getReserva_fecha_fin(),
                 dto.getReserva_fecha_inicio());
+
         if (!reservasSolapadas.isEmpty()) {
             throw new ReservaSolapadaException();
         }
 
-        // Crear entidad y asignar estado inicial
         var reserva = reservaMapper.toEntity(dto);
         reserva.setEstatus_reserva(StatusReserva.PENDIENTE);
 
@@ -191,16 +164,22 @@ public class ReservaServicio {
     }
 }
 
-/*
- * Aqui definimos el servicio ReservaServicio con un método listarReservas() que
- * obtiene todas las reservas
- * de la base de datos usando el repositorio reservaRepositorio, las convierte a
- * DTOs usando reservaMapper y
- * devuelve la lista de DTOs.
- * - El método listarReservas() llama a reservaRepositorio.findAll() para
- * obtener todas las reservas, luego
- * usa un stream para mapear cada entidad Reserva a un ReservaResponseDTO usando
- * reservaMapper.toResponse(),
- * y finalmente colecta el resultado en una lista que se devuelve al
- * controlador.
+/**
+ * Este servicio contiene toda la lógica de negocio relacionada con las reservas.
+ * Es el encargado de validar datos, aplicar reglas de negocio, consultar la base de datos y coordinar el flujo entre repositorios, mapper y controladores.
+ *
+ * Sus responsabilidades principales son:
+ *
+ * - Validar que la sala y el usuario existen antes de crear o editar una reserva.
+ * - Verificar que las fechas sean válidas (no nulas, no pasadas, inicio < fin).
+ * - Evitar solapamientos entre reservas de la misma sala.
+ * - Gestionar el ciclo de vida de una reserva: creación, edición, confirmación, cancelación, borrado y consulta.
+ *
+ * También utiliza excepciones personalizadas para comunicar errores de forma clara y consistente, las cuales son manejadas por el GlobalExceptionHandler.
+ *
+ * El uso del mapper garantiza que la API nunca exponga entidades JPA directamente, manteniendo la arquitectura limpia y desacoplada.
+ * 
+ * Resumen:
+ * Servicio que valida, crea, edita, confirma, cancela y borra reservas.
+ * Aplica todas las reglas de negocio.
  */

@@ -52,11 +52,14 @@ public class ReservaResponseDTO {
 }
 
 /*
- * ReservaResponseDTO representa los datos que el sistema devuelve al cliente después de crear o consultar una reserva.
+ * Este DTO representa los datos que el sistema devuelve al cliente cuando se consulta, crea, edita, confirma o cancela una reserva. A diferencia del
+ * RequestDTO, aquí sí aparecen valores generados por el sistema, como el ID de la reserva y el estado actual.
  *
- * A diferencia del Request, aquí sí se incluyen:
- * - id: generado automáticamente por la base de datos.
- * - status: asignado por el sistema (PENDING, CONFIRMED o CANCELLED).
+ * Su función es mostrar al cliente la información final tal como está guardada en la base de datos: sala, usuario, fechas y estatus. Esto permite mantener
+ * la API clara y evitar exponer directamente la entidad JPA.
  *
- * Este DTO muestra el estado final de la reserva tal como está almacenada en el sistema, incluyendo la sala, el usuario y las fechas.
+ * El ResponseDTO garantiza que el cliente recibe solo los datos necesarios y en un formato estable, sin depender de cambios internos del modelo.
+ * 
+ * Resumen:
+ * Datos que el sistema devuelve al cliente sobre una reserva ya creada o consultada.
  */

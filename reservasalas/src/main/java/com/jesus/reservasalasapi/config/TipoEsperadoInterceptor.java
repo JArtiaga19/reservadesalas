@@ -2,8 +2,6 @@ package com.jesus.reservasalasapi.config;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.util.ContentCachingRequestWrapper;
-
 import com.jesus.reservasalasapi.controlador.ControladorContexto;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,28 +11,35 @@ import jakarta.servlet.http.HttpServletResponse;
 public class TipoEsperadoInterceptor implements HandlerInterceptor {
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-            throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        // Envolver la request para poder leer el body varias veces
-        ContentCachingRequestWrapper wrapper = new ContentCachingRequestWrapper(request);
+        String rutaSolicitada = request.getRequestURI();
 
-        // Guardar tipo esperado
-        String path = wrapper.getRequestURI();
-        if (path.startsWith("/usuarios")) {
+        if (rutaSolicitada.startsWith("/usuarios")) {
             ControladorContexto.setTipoEsperado("usuarios");
-        } else if (path.startsWith("/salas")) {
+        } else if (rutaSolicitada.startsWith("/salas")) {
             ControladorContexto.setTipoEsperado("salas");
-        } else if (path.startsWith("/reservas")) {
+        } else if (rutaSolicitada.startsWith("/reservas")) {
             ControladorContexto.setTipoEsperado("reservas");
         }
 
-        // Leer el body para cachearlo
-        wrapper.getParameterMap(); // fuerza el cacheo
-        String body = new String(wrapper.getContentAsByteArray(), wrapper.getCharacterEncoding());
-        ControladorContexto.setJsonEnviado(body);
-
         return true;
     }
-
 }
+
+/*
+ * Este interceptor se ejecuta antes de que llegue la petición al controlador.
+ * Su función es detectar a qué tipo de recurso quiere acceder el cliente (usuarios, salas o reservas) según la URL que está usando.
+ *
+ * Con esa información, guarda el tipo esperado en un contexto compartido, para que luego los controladores puedan validar si el cliente está enviando
+ * los datos correctos en cada endpoint.
+ *
+ * No modifica la petición ni toca el contenido del body.
+ * Solo identifica el tipo de operación que el cliente intenta hacer.
+ * 
+ * Resumen:
+ * Este interceptor se ejecuta antes de entrar al controlador.
+ * Su trabajo, detecta si la petición va a /usuarios, /salas o /reservas y guardar ese tipo para que luego los controladores sepan qué datos esperar.
+ * No toca el body ni modifica la petición, solo identifica el tipo de recurso.
+ */
+

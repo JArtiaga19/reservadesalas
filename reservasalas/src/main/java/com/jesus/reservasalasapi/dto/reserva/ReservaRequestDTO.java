@@ -68,15 +68,17 @@ public class ReservaRequestDTO {
 }
 
 /*
- * Este DTO representa lo que el cliente envía para crear una reserva.
+ * Este DTO representa los datos que el cliente debe enviar para crear o editar una reserva. Solo contiene información de entrada, nunca datos generados por
+ * el sistema.
+ *
+ * Incluye validaciones para asegurar que el cliente envía valores correctos:
+ * - @NotNull: obliga a que el campo venga informado.
+ * - @FutureOrPresent: garantiza que las fechas no sean pasadas.
+ *
+ * Este objeto evita exponer directamente la entidad JPA y permite controlar exactamente qué datos puede enviar el cliente,
+ * manteniendo la API más segura y clara.
  * 
- * Validaciones:
- * - @NotNull: el cliente debe enviar el valor, no puede venir vacío.
- * - @FutureOrPresent: las fechas deben ser hoy o futuras.
- * 
- * No se usa @NotBlank ni @Pattern porque estos solo funcionan con Strings, y aquí estamos usando LocalDate, que Spring convierte automáticamente.
- * 
- * El RequestDTO solo contiene datos de entrada.
- * El id y el status NO vienen del cliente: los genera el sistema.
+ * Resumen:
+ * Datos que el cliente envía para crear o editar una reserva. Lleva validaciones para asegurar que todo viene correcto.
  */
 

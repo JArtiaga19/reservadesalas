@@ -7,21 +7,32 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-@Entity // Indica que esta clase es una entidad de JPA
-@Table(name = "usuarios") // Especifica el nombre de la tabla en la base de datos
+@Entity
+@Table(name = "usuarios")
 public class Usuario {
-    
-    @Id // Indica que este campo es la clave primaria de la entidad
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Especifica que el valor del ID se generará automáticamente por la base de datos
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_usuario;
-    
-    @Column(nullable = false) // Indica que este campo no puede ser nulo en la base de datos
+
+    @Column(nullable = false)
     private String nombre_usuario;
-    
-    @Column(nullable = false) // Indica que este campo no puede ser nulo en la base de datos
+
+    @Column(nullable = false)
     private String email_usuario;
 
     public Usuario() {
+    }
+
+    public Usuario(Long id_usuario, String nombre_usuario, String email_usuario) {
+        this.id_usuario = id_usuario;
+        this.nombre_usuario = nombre_usuario;
+        this.email_usuario = email_usuario;
+    }
+
+    public Usuario(String nombre_usuario, String email_usuario) {
+        this.nombre_usuario = nombre_usuario;
+        this.email_usuario = email_usuario;
     }
 
     public Long getId_usuario() {
@@ -49,6 +60,3 @@ public class Usuario {
     }
 
 }
-
-// 1. la id con Long porque JPA y las bases de datos trabajan mejor con tipos numericos largos.
-

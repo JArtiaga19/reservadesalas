@@ -4,10 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication // Anotación que indica que esta es la clase principal de la aplicación Spring Boot.
-// Clase principal de la aplicación, donde se inicia el contexto de Spring Boot.
 public class ReservasalasApplication {
-
-	// Método main, punto de entrada de la aplicación.
 	public static void main(String[] args) {
 		SpringApplication.run(ReservasalasApplication.class, args);
 	}
@@ -16,8 +13,7 @@ public class ReservasalasApplication {
 
 /*
  * Clase principal de la aplicación Spring Boot.
- * Esta clase es el punto de entrada del proyecto y contiene el método main(),
- * que se encarga de iniciar el contexto de Spring Boot y levantar toda la aplicación.
+ * Esta clase es el punto de entrada del proyecto y contiene el método main(), que se encarga de iniciar el contexto de Spring Boot y levantar toda la aplicación.
  *
  * La anotación @SpringBootApplication combina:
  *  - @Configuration → indica que la clase contiene configuración de Spring
@@ -32,7 +28,6 @@ public class ReservasalasApplication {
  *  - El sistema de validaciones
  *  - El manejador global de excepciones
  * 
- * En resumen, esta clase arranca toda la API de reservas y pone en marcha
- * el servidor embebido (Tomcat) para que la aplicación responda a peticiones HTTP.
+ * En resumen, esta clase arranca toda la API de reservas y pone en marcha el servidor embebido (Tomcat) para que la aplicación responda a peticiones HTTP.
  */
 

@@ -15,4 +15,7 @@ public class ReservaSolapadaException extends RuntimeException{
  * Es manejada por el controlador global de excepciones, devolviendo un mensaje claro al cliente junto con un código HTTP 409 (Conflict).
  *
  * Su objetivo es mantener la integridad del sistema de reservas y evitar conflictos entre usuarios al intentar reservar la misma sala en el mismo periodo.
+ * 
+ * Resumen:
+ * Se lanza cuando ya existe una reserva en esa sala para esas fechas.
  */

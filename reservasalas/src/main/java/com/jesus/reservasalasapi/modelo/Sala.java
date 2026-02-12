@@ -7,22 +7,33 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-@Entity // Indica que esta clase es una entidad de JPA
-@Table(name = "salas") // Especifica el nombre de la tabla en la base de datos
+@Entity
+@Table(name = "salas")
 public class Sala {
 
-    @Id // Indica que este campo es la clave primaria de la entidad
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Especifica que el valor del ID se generará automáticamente por la base de datos
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_sala;
 
-    @Column(nullable = false) // Indica que este campo no puede ser nulo en la base de datos
+    @Column(nullable = false)
     private String nombre_sala;
 
     @Column(nullable = false)
     private int capacidad_sala;
 
-    public Sala() { // Constructor vacío necesario para JPA
+    public Sala() {
 
+    }
+
+    public Sala(Long id_sala, String nombre_sala, int capacidad_sala) {
+        this.id_sala = id_sala;
+        this.nombre_sala = nombre_sala;
+        this.capacidad_sala = capacidad_sala;
+    }
+
+    public Sala(String nombre_sala, int capacidad_sala) {
+        this.nombre_sala = nombre_sala;
+        this.capacidad_sala = capacidad_sala;
     }
 
     public Long getId_sala() {
@@ -48,7 +59,5 @@ public class Sala {
     public void setCapacidad_sala(int capacidad_sala) {
         this.capacidad_sala = capacidad_sala;
     }
-
+    
 }
-
-// 1. la id con Long porque JPA y las bases de datos trabajan mejor con tipos numericos largos.
