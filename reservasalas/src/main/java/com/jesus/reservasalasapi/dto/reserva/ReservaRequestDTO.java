@@ -68,17 +68,8 @@ public class ReservaRequestDTO {
 }
 
 /*
- * Este DTO representa los datos que el cliente debe enviar para crear o editar una reserva. Solo contiene información de entrada, nunca datos generados por
- * el sistema.
- *
- * Incluye validaciones para asegurar que el cliente envía valores correctos:
- * - @NotNull: obliga a que el campo venga informado.
- * - @FutureOrPresent: garantiza que las fechas no sean pasadas.
- *
- * Este objeto evita exponer directamente la entidad JPA y permite controlar exactamente qué datos puede enviar el cliente,
- * manteniendo la API más segura y clara.
- * 
- * Resumen:
- * Datos que el cliente envía para crear o editar una reserva. Lleva validaciones para asegurar que todo viene correcto.
+ * DTO que recibe los datos para crear o editar una reserva.
+ * Incluye validaciones para obligar a enviar sala, usuario y fechas válidas.
+ * Solo contiene datos de entrada; no tiene lógica.
+ * Evita exponer la entidad real y mantiene la API segura.
  */
-

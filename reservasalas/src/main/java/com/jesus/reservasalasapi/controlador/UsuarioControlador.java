@@ -35,15 +35,8 @@ public class UsuarioControlador {
 }
 
 /*
- * Este controlador gestiona las operaciones relacionadas con los usuarios.
- * Expone los endpoints REST necesarios para listar todos los usuarios y crear nuevos registros.
- *
- * Su función es recibir las peticiones HTTP, extraer los datos enviados por el cliente y delegar toda la lógica de acceso a datos en el repositorio. 
- * De esta forma, el controlador se mantiene simple y centrado únicamente en coordinar la entrada y salida de información.
- *
- * En este caso no se usa un servicio intermedio porque las operaciones son básicas y no requieren lógica adicional. Aun así, la estructura permite
- * añadir una capa de servicio en el futuro si fuera necesario.
- * 
- * Resumen:
- * Controlador que lista usuarios y permite crear nuevos. Solo recibe peticiones y llama al repositorio.
-*/
+ * Controlador de usuarios.
+ * Lista todos los usuarios y permite crear nuevos.
+ * Recibe la petición y delega en el repositorio.
+ * No tiene lógica de negocio porque las operaciones son simples.
+ */

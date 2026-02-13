@@ -1,7 +1,7 @@
 package com.jesus.reservasalasapi.excepciones;
 
 public class FechasInvalidasException extends RuntimeException {
-    
+
     public FechasInvalidasException() {
         super("La fecha de inicio debe ser anterior a la fecha de fin");
     }
@@ -13,17 +13,19 @@ public class FechasInvalidasException extends RuntimeException {
 }
 
 /*
- * Excepción personalizada que se lanza cuando las fechas de una reserva no son válidas.
- *
- * Esta excepción se utiliza en la lógica de negocio para asegurar que:
- * - La fecha de inicio de la reserva sea anterior a la fecha de fin.
- * - No se permitan reservas con rangos de fechas incoherentes.
- *
- * Forma parte de las validaciones implementadas en la capa de servicio y es manejada globalmente por el controlador de excepciones (ControllerAdvice),
- * devolviendo un mensaje claro y un código de estado HTTP 400 al cliente.
- *
- * Su propósito es mantener la integridad de los datos y garantizar que las reglas de negocio relacionadas con fechas se cumplan correctamente.
+ * FechasInvalidasException
  * 
- * Resumen:
- * Se lanza cuando las fechas de una reserva no son válidas (inicio después de fin).
+ * Excepción personalizada usada cuando las fechas de una reserva no son
+ * válidas.
+ * 
+ * Se lanza cuando:
+ * - La fecha de inicio es posterior a la fecha de fin.
+ * - El rango de fechas no tiene sentido.
+ * 
+ * Se usa en la capa de servicio para aplicar reglas de negocio.
+ * El ControllerAdvice la captura y devuelve un error 400 con un mensaje claro.
+ * 
+ * En resumen:
+ * Garantiza que las reservas tengan fechas coherentes y evita datos inválidos
+ * en el sistema.
  */

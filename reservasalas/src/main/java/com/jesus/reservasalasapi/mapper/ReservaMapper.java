@@ -31,17 +31,16 @@ public class ReservaMapper {
     }
 }
 
-/**
- * Esta clase se encarga de convertir entre la entidad Reserva y sus DTOs (ReservaRequestDTO y ReservaResponseDTO). Su función es mantener separadas
- * las estructuras internas del modelo y las estructuras expuestas al cliente.
+/*
+ * Convierte entre la entidad Reserva y sus DTOs.
  *
- * - toEntity(): transforma los datos enviados por el cliente en una entidad Reserva lista para ser procesada por la capa de servicio o persistida.
+ * toEntity:
+ * - Transforma los datos enviados por el cliente en una entidad Reserva.
  *
- * - toResponse(): convierte una entidad Reserva en un DTO que será devuelto al cliente, asegurando que solo se expongan los datos necesarios.
+ * toResponse:
+ * - Convierte una Reserva en un DTO listo para devolver al cliente.
  *
- * El uso de un mapper mantiene el código más limpio, evita duplicación y garantiza que los cambios en la entidad o en los DTOs estén centralizados.
- * 
- * Resumen:
- * Convierte entre Reserva y sus DTOs (entrada y salida).
+ * En resumen:
+ * Los mappers solo convierten datos.
+ * No tienen lógica de negocio y mantienen la API limpia y ordenada.
  */
-

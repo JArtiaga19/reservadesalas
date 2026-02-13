@@ -74,16 +74,9 @@ public class ReservaControlador {
 }
 
 /*
- * Este controlador se encarga de gestionar todas las operaciones relacionadas con las reservas. Expone los endpoints REST que permiten listar, crear,
- * editar, borrar, confirmar y cancelar reservas.
- *
- * Su función principal es recibir las peticiones HTTP, extraer los datos necesarios (como el ID o el cuerpo JSON) y delegar toda la lógica de negocio
- * en la capa de servicio. De esta forma, el controlador se mantiene limpio y centrado únicamente en coordinar la entrada y salida de información.
- *
- * El uso de DTOs evita exponer directamente las entidades JPA y garantiza que la API tenga una estructura clara, segura y desacoplada del modelo interno.
- * 
- * Cada método corresponde a una operación concreta del CRUD o a acciones específicas como confirmar o cancelar una reserva.
- * 
- * Resumen:
- * Controlador que recibe peticiones sobre reservas y llama al servicio para hacer el CRUD, confirmar y cancelar. Solo coordina peticiones y respuestas.
-*/
+ * Controlador de reservas.
+ * Recibe peticiones HTTP y llama al servicio para hacer el CRUD:
+ * listar, crear, editar, borrar, confirmar y cancelar reservas.
+ * No contiene lógica de negocio; solo coordina entrada y salida.
+ * Usa DTOs para no exponer las entidades internas.
+ */

@@ -34,7 +34,6 @@ public class ReservaServicio {
         this.usuarioRepositorio = usuarioRepositorio;
     }
 
-    // Listar todas las reservas
     public List<ReservaResponseDTO> listarReservas() {
         return reservaRepositorio.findAll()
                 .stream()
@@ -42,7 +41,6 @@ public class ReservaServicio {
                 .collect(Collectors.toList());
     }
 
-    // Crear reserva con validaciones de negocio
     public ReservaResponseDTO crearReserva(ReservaRequestDTO dto) {
 
         List<String> errores = new ArrayList<>();
@@ -87,7 +85,6 @@ public class ReservaServicio {
         return reservaMapper.toResponse(guardada);
     }
 
-    // Confirmar reserva
     public ReservaResponseDTO confirmar(Long id) {
         Reserva reserva = reservaRepositorio.findById(id)
                 .orElseThrow(() -> new ReservaNoEncontradaException(id));
@@ -98,7 +95,6 @@ public class ReservaServicio {
         return reservaMapper.toResponse(guardada);
     }
 
-    // Cancelar reserva
     public ReservaResponseDTO cancelar(Long id) {
         Reserva reserva = reservaRepositorio.findById(id)
                 .orElseThrow(() -> new ReservaNoEncontradaException(id));
@@ -109,7 +105,6 @@ public class ReservaServicio {
         return reservaMapper.toResponse(guardada);
     }
 
-    // Obtener reserva por ID
     public ReservaResponseDTO obtenerPorId(Long id) {
         Reserva reserva = reservaRepositorio.findById(id)
                 .orElseThrow(() -> new ReservaNoEncontradaException(id));
@@ -117,7 +112,6 @@ public class ReservaServicio {
         return reservaMapper.toResponse(reserva);
     }
 
-    // Editar reserva
     public ReservaResponseDTO editar(Long id, ReservaRequestDTO dto) {
         Reserva reserva = reservaRepositorio.findById(id)
                 .orElseThrow(() -> new ReservaNoEncontradaException(id));
@@ -134,7 +128,6 @@ public class ReservaServicio {
         return reservaMapper.toResponse(reserva);
     }
 
-    // Borrar reserva
     public void borrar(Long id) {
         if (!reservaRepositorio.existsById(id)) {
             throw new ReservaNoEncontradaException(id);
@@ -142,7 +135,6 @@ public class ReservaServicio {
         reservaRepositorio.deleteById(id);
     }
 
-    // Validación de fechas
     private void validarFechas(ReservaRequestDTO dto) {
         if (dto.getReserva_fecha_inicio() == null || dto.getReserva_fecha_fin() == null) {
             throw new FechasInvalidasException();
@@ -152,7 +144,6 @@ public class ReservaServicio {
         }
     }
 
-    // Validación de solapamientos
     private void validarSolapamientos(Long id, ReservaRequestDTO dto) {
         var solapadas = reservaRepositorio.buscarSolapadas(
                 dto.getSala_id(),
@@ -165,19 +156,26 @@ public class ReservaServicio {
 }
 
 /**
- * Este servicio contiene toda la lógica de negocio relacionada con las reservas.
- * Es el encargado de validar datos, aplicar reglas de negocio, consultar la base de datos y coordinar el flujo entre repositorios, mapper y controladores.
+ * Este servicio contiene toda la lógica de negocio relacionada con las
+ * reservas.
+ * Es el encargado de validar datos, aplicar reglas de negocio, consultar la
+ * base de datos y coordinar el flujo entre repositorios, mapper y
+ * controladores.
  *
  * Sus responsabilidades principales son:
  *
- * - Validar que la sala y el usuario existen antes de crear o editar una reserva.
+ * - Validar que la sala y el usuario existen antes de crear o editar una
+ * reserva.
  * - Verificar que las fechas sean válidas (no nulas, no pasadas, inicio < fin).
  * - Evitar solapamientos entre reservas de la misma sala.
- * - Gestionar el ciclo de vida de una reserva: creación, edición, confirmación, cancelación, borrado y consulta.
+ * - Gestionar el ciclo de vida de una reserva: creación, edición, confirmación,
+ * cancelación, borrado y consulta.
  *
- * También utiliza excepciones personalizadas para comunicar errores de forma clara y consistente, las cuales son manejadas por el GlobalExceptionHandler.
+ * También utiliza excepciones personalizadas para comunicar errores de forma
+ * clara y consistente, las cuales son manejadas por el GlobalExceptionHandler.
  *
- * El uso del mapper garantiza que la API nunca exponga entidades JPA directamente, manteniendo la arquitectura limpia y desacoplada.
+ * El uso del mapper garantiza que la API nunca exponga entidades JPA
+ * directamente, manteniendo la arquitectura limpia y desacoplada.
  * 
  * Resumen:
  * Servicio que valida, crea, edita, confirma, cancela y borra reservas.
