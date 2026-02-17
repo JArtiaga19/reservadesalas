@@ -281,35 +281,21 @@ Configuré la base de datos y probé la conexión.
 ### 1. Objetivo del día
 (Qué quiero conseguir hoy. 1–3 puntos claros)
 
-- Tarea 4 — DTOs y validaciones
-  Objetivo: separar API y dominio.
-  Qué hacer
-  · Crear DTOs de request y response.
-  · Añadir validaciones con Bean Validation.
-  · Crear mappers manuales.
-  Condición
-  · Ningún controller debe devolver entidades directamente.
-
-- Tarea 5 — CRUD básico (listar + crear)
-  Objetivo: primer flujo completo de la API.
-  Orden obligatorio
-  1. Listar
-  2. Crear
-  Qué hacer
-  · Controllers mínimos.
-  · Services con lógica básica.
-  · Respuestas HTTP correctas.
+- Tarea 6 — Reglas de negocio específicas.
+- Tarea 7 — Resto del CRUD.
+- Tarea 8 — Manejo global de errores.
+- Tarea 9 — Documentación final.
 
 ---
 
 ### 2. Plan antes de tocar código
 (Qué pasos voy a seguir y en qué orden. Pensado antes de programar)
 
-1. Crear los DTOs necesarios para separar claramente la API del dominio.
-2. Añadir las validaciones con Bean Validation para asegurar que los datos de entrada son correctos.
-3. Implementar mappers manuales para convertir entre entidades y DTOs.
-4. Crear los endpoints mínimos para listar y crear, siguiendo el orden obligatorio.
-5. Implementar los servicios con la lógica básica necesaria para soportar el CRUD inicial.
+1. Revisar el CRUD básico ya implementado para asegurar que puedo extenderlo sin romper nada.
+2. Implementar las reglas de negocio en los servicios.
+3. Añadir los endpoints restantes: obtener por ID, editar y borrar.
+4. Crear excepciones personalizadas y un @ControllerAdvice para centralizar errores.
+5. Completar la documentación final del proyecto (README, ejemplos, coherencia docs ↔ código).
 
 ---
 
@@ -317,12 +303,13 @@ Configuré la base de datos y probé la conexión.
 (Qué entiendo del problema y qué necesito tener claro antes de implementar)
 
 - Entiendo:
-  - Que los DTOs sirven para no exponer entidades directamente.
-  - Que las validaciones deben aplicarse en los DTOs de entrada.
-  - Que el CRUD básico debe funcionar con respuestas HTTP correctas.
+  - Que las reglas de negocio deben estar en los servicios, no en los controllers.
+  - Que el CRUD debe estar completo y devolver los códigos HTTP correctos.
+  - Que el manejo global de errores es clave para una API profesional.
+  - Que la documentación final debe reflejar fielmente el estado real del proyecto.
 - Tengo dudas sobre:
-  - Si necesitaré DTOs adicionales para casos más complejos.
-  - Cómo organizar mejor los mappers para mantener el código limpio.
+  - Si algunas reglas de negocio deberían haberse diseñado de forma más genérica.
+  - Si la estructura de excepciones es suficientemente escalable para futuros cambios.
 
 ---
 
@@ -330,16 +317,19 @@ Configuré la base de datos y probé la conexión.
 (Qué he hecho exactamente, dónde y por qué)
 
 - Archivos modificados:
-  - Nuevos DTOs creados.
-  - Nuevos mappers implementados.
-  - Nuevos controllers y services añadidos.
+  - Servicios ampliados con reglas de negocio.
+  - Nuevos endpoints para obtener por ID, editar y borrar.
+  - Paquete de excepciones creado.
+  - GlobalExceptionHandler añadido.
+  - README.md completado con descripción, requisitos, cómo ejecutar y ejemplos de requests.
+  - Documentación interna revisada para asegurar coherencia.
 - Descripción de los cambios:
-  - Añadí DTOs de request y response para separar API y dominio.
-  - Implementé validaciones con Bean Validation.
-  - Creé mappers manuales para transformar entidades ↔ DTOs.
-  - Implementé los endpoints de listar y crear.
+  - Implementé reglas de negocio específicas del dominio.
+  - Añadí endpoints para completar el CRUD.
+  - Centralicé el manejo de errores con @ControllerAdvice.
+  - Documenté cómo ejecutar el proyecto y añadí ejemplos de uso.
 - Motivo del cambio:
-  - Cumplir con los requisitos de Tarea 4 y Tarea 5 y avanzar hacia un CRUD funcional.
+  - Completar las tareas 6 a 9 y dejar el proyecto listo como entregable real.
 
 ---
 
@@ -347,49 +337,45 @@ Configuré la base de datos y probé la conexión.
 (Decisiones que podrían haberse hecho de otra manera)
 
 - Decisión:
-  - Crear mappers manuales en lugar de usar MapStruct.
+  - Usar PUT para actualizaciones completas en lugar de PATCH.
 - Opciones consideradas:
-  - Opción A: Mappers manuales.
-  - Opción B: Usar MapStruct.
+  - PUT (actualización completa).
+  - PATCH (actualización parcial).
 - Motivo de la elección:
-  - Mayor control y simplicidad en esta fase inicial.
+  - Simplicidad y claridad en esta fase del proyecto.
 - Trade-off asumido:
-  - Más código manual, pero más fácil de entender al principio.
+  - Menos flexibilidad, pero menos complejidad.
 
 ---
 
 ### 6. Problemas y errores
 (Bloqueos reales y cómo se abordaron)
 
-- Error / problema:
-  - Me paso como las tareas anteriores, al finalizar la tarea 4, la tarea 5 la empece a hacer en el main y ya me bloquee porque me salia que el codigo estaba contaminado, y no sabia que hacer, una idea era hacerla de nuevo desde 0 pero me iba a llevar mucho tiempo.
+- Problema:
+  - Algunas reglas de negocio entraban en conflicto con validaciones previas.
 - Hipótesis inicial:
-  - El problema no era del código en sí, sino de la gestión de ramas: estaba trabajando en la rama equivocada y mezclando tareas que debían ir separadas.
+  - Las validaciones estaban demasiado acopladas al DTO.
 - Pruebas realizadas:
-  - Revisé el historial de commits.
-  - Comparé los cambios entre ramas para ver qué archivos estaban afectados.
-  - Probé a mover los cambios a una rama nueva para aislar el problema.
+  - Moví parte de la validación al servicio.
+  - Probé casos borde manualmente.
 - Resultado:
-  - Este dia nada no consegui hacer nada mas que la tarea 4 y la 5 dejarla mal en la main impidiendome seguir, el lunes seguire para saber que hacer o que procedimiento seguir para no romper el codigo entero
+  - Las reglas quedaron correctamente aplicadas sin romper el flujo.
 - Solución final:
-  - Decidí no tocar más la rama main para evitar empeorar la situación.
-  - Creé una rama nueva para mover allí los cambios de la tarea 5 y mantener el trabajo separado.
-  - Organicé los archivos afectados para poder retomar el desarrollo de forma limpia en la siguiente sesión.
+  - Separar claramente validación superficial (DTO) de validación de negocio (servicio).
 - Aprendizaje:
-  - Antes de empezar cualquier tarea debo asegurararme de estar en la rama correcta o crear una nueva para evitar mezclar trabajos.
-  - La gestión de ramas es fundamental: un error pequeño puede bloquear todo el flujo de trabajo y hacer perder mucho tiempo.
+  - La lógica de negocio siempre debe tener prioridad sobre validaciones simples.
 
 ---
 
 ### 7. Uso de Inteligencia Artificial
 (Obligatorio si se ha utilizado IA)
 
-- Herramienta utilizada: Copilot y ChatGPT
-- Motivo del uso: Explicarle el problema que tenia y haber si me podia sacar una solucion que no fuera volver a empezar todo de nuevo y que tampoco afectara a mi codigo.
-- Pregunta realizada (o resumen fiel): Como puedo borrar lo del main y ponerselo a la rama de tarea 5 sin que me afecte al resto de codigo.
-- Respuesta obtenida (resumida): Desde borrar lo que hice recordando que puse hasta volver a crearlo todo de nuevo.
-- Qué he validado por mi cuenta: Nada porque no podia avanzar.
-- Qué he implementado finalmente (con mis palabras): Nada porque no podia avanzar y no podia comprobar si me arrancaba e iba.
+- Herramienta utilizada: Copilot y ChatGPT.
+- Motivo del uso: Consultar dudas sobre estructura de excepciones y organización de reglas de negocio.
+- Pregunta realizada (resumen): Cómo organizar mejor el manejo global de errores y si la lógica de negocio estaba bien ubicada.
+- Respuesta obtenida (resumida): Sugerencias sobre separar validaciones y usar excepciones personalizadas.
+- Qué he validado por mi cuenta: Probé manualmente los errores y revisé la estructura final.
+- Qué he implementado finalmente: Un ControllerAdvice con excepciones personalizadas y validaciones reorganizadas.
 
 ---
 
@@ -397,172 +383,17 @@ Configuré la base de datos y probé la conexión.
 (En qué punto estoy ahora)
 
 - Funcionalidades completadas:
-  - DTOs creados.
-  - Validaciones implementadas.
-  - Mappers manuales funcionando.
-  - CRUD básico de listar y crear operativo.
-  - Pero todo sin poder probarlo debido a los problemas
-
+  - CRUD completo.
+  - Reglas de negocio implementadas.
+  - Manejo global de errores.
+  - Documentación final completada.
 - Pendiente:
-  - Arreglar el problema de la tarea 5, sacarla de main y eterla en su correspondiente rama.
+  - Nada técnico. Solo quedaría la defensa (Tarea 10), pero no forma parte de este día.
 
 ---
 
 ### 9. Próximo paso
 (Qué haré a continuación)
 
-- Esperar una respuesta de la empresa y sino arreglarlo por mi cuenta rezando a que no me carge todo el codigo.
-
----
-
-### 10. Autoevaluación rápida
-(Reflexión personal breve)
-
-- Qué he entendido bien hoy:
-  - No fiarme y asegurarme de estar en la rama correspondiente de trabajo.
-
-- Qué necesito reforzar:
-  - Profundizar un poco mas en git en el tema de ramas y hacer su push merge con main etc.
-
---------------------------------------------------
-
-
-
-# Engineering Log
-
-## TAREA 0 — Preparación inicial
-- Creación del repositorio en GitHub.
-- Clonado del repositorio en local.
-- Creación de la rama `tarea-0-configuracion`.
-- Preparación de la estructura mínima del proyecto.
-- Uso de IA: organización del flujo de trabajo y aclaración de pasos.
-
---------------------------------------------------
-
-## TAREA 1 — Diseño de base de datos y endpoints
-- Se definieron las tablas: salas, usuarios y reservas.
-- Se documentaron los endpoints para salas, usuarios y reservas.
-- Se creó la documentación en los archivos db_schema.md y api_endpoints.md.
-
---------------------------------------------------
-
-## TAREA 2 — Arranque técnico
-- Se configuró la conexión a la base de datos.
-- Se verificó que la aplicación arranca sin errores.
-- Se creó el endpoint de salud GET /health para comprobar el estado del servicio.
-- Se comprobó que el endpoint responde correctamente con código 200.
-
---------------------------------------------------
-
-## TAREA 3 — Modelo de dominio
-- Se implementaron las entidades JPA: Sala, Usuario, Reserva y el enum StatusReserva.
-- Se definieron los atributos según el diseño del dominio.
-- Se utilizaron IDs manuales (id_sala, id_usuario) para representar relaciones sin usar anotaciones como @ManyToOne, cumpliendo el enunciado.
-- Se añadieron constructores, getters y setters en todas las entidades.
-- Se crearon los repositorios JPA: SalaRepository, UsuarioRepository y ReservaRepository.
-- Los repositorios proporcionan automáticamente operaciones CRUD gracias a JpaRepository.
-- No se crearon controllers ni lógica de negocio, cumpliendo las restricciones de la tarea.
-
---------------------------------------------------
-
-## TAREA 4 — DTOs y validaciones
-- Se crearon DTOs de request y response para las entidades Sala, Usuario y Reserva.
-- Los DTOs permiten separar la capa de API del modelo de dominio.
-- Se añadieron validaciones mediante Bean Validation (`@NotNull`, `@NotBlank`, etc.) en los DTOs de entrada.
-- Se implementaron mappers manuales para convertir entre entidades y DTOs.
-- Se garantizó que ningún controller devuelve entidades JPA directamente.
-- Se mantuvo la lógica de validación fuera de las entidades, cumpliendo buenas prácticas.
-
---------------------------------------------------
-
-## TAREA 5 — CRUD básico (listar + crear)
-- Se implementaron controllers mínimos para las entidades principales.
-- Se respetó el orden obligatorio de implementación: primero listar y luego crear.
-- Se crearon services con la lógica básica de negocio.
-- Los services se encargan de interactuar con los repositorios JPA.
-- Los endpoints de listado devuelven colecciones de DTOs.
-- Los endpoints de creación reciben DTOs de request y devuelven DTOs de response.
-- Se devolvieron respuestas HTTP correctas:
-  - 200 OK para operaciones de listado.
-  - 201 CREATED para operaciones de creación.
-- Se validó el correcto funcionamiento del flujo completo de la API.
-
---------------------------------------------------
-
-## TAREA 6 — Reglas de negocio específicas
-Se implementaron reglas de negocio avanzadas en el servicio de reservas, con el objetivo de garantizar la coherencia de los datos y el correcto flujo del ciclo de vida de una reserva.
-
-### Funcionalidades implementadas
-- Se implementaron validaciones de negocio avanzadas en el servicio de reservas.
-- Se añadió la comprobación de solapamientos entre reservas mediante una consulta específica al repositorio.
-- Se validó que la fecha de inicio sea anterior a la fecha de fin.
-- Se añadió la lógica para gestionar el ciclo de vida de la reserva mediante los estados:
-  - PENDIENTE
-  - CONFIRMADA
-  - CANCELADA
-- Se implementaron dos nuevos endpoints:
-  - `PUT /reservas/{id}/confirmar`
-  - `PUT /reservas/{id}/cancelar`
-- Se añadieron mensajes de error claros para:
-  - Fechas inválidas
-  - Solapamientos de reservas
-  - Reservas inexistentes
-  - Que la fecha solo pueda ser de la actual a mas adelante, nunca una que haya sido ya
-- Se realizaron pruebas manuales en Postman para validar todos los casos borde.
-- Se verificó en la base de datos (H2) que los estados y las reglas de negocio se aplican correctamente.
-
---------------------------------------------------
-
-## TAREA 7 — Resto del CRUD (obtener, editar, borrar)
-En esta tarea se completa el CRUD de reservas añadiendo los endpoints restantes y gestionando correctamente los errores.
-
-### Funcionalidades implementadas
-- Implementación del endpoint `GET /reservas/{id}` para obtener una reserva por ID.
-- Implementación del endpoint `PUT /reservas/{id}` para editar una reserva existente.
-- Implementación del endpoint `DELETE /reservas/{id}` para eliminar una reserva.
-- Asignación automática del estado inicial `PENDIENTE` al crear una reserva (evitando errores de columna nula).
-
-### Validaciones aplicadas al editar
-- Fechas válidas (**inicio < fin**).
-- No solapamiento con otras reservas.
-- Reserva existente.
-
-### Gestión de errores
-- **404 Not Found** → reserva inexistente.
-- **400 Bad Request** → fechas inválidas.
-- **409 Conflict** → solapamiento.
-
-### Pruebas y verificación
-- Pruebas completas en Postman y verificación en H2 Console.
-- Confirmación de que todas las operaciones CRUD funcionan correctamente.
-
---------------------------------------------------
-
-## TAREA 8 — Manejo global de errores
-En esta tarea se implementa un sistema profesional de gestión de errores centralizado mediante **excepciones personalizadas** y un `@ControllerAdvice`.
-
-### Funcionalidades implementadas
-- **Creación de excepciones personalizadas:**
-  - `ReservaNoEncontradaException`
-  - `ReservaSolapadaException`
-  - `FechasInvalidasException`
-- **Implementación de un manejador global de errores** (`GlobalExceptionHandler`) con:
-  - Respuestas JSON uniformes
-  - Códigos HTTP coherentes
-  - Mensajes claros y consistentes
-- Sustitución de todos los `IllegalArgumentException` por **excepciones específicas**.
-- Integración del manejo global en **todos los métodos** del servicio de reservas.
-
-### Pruebas realizadas
-- Prueba de fechas inválidas → **400 Bad Request**
-- Prueba de fechas nulas → **400 Bad Request**
-- Prueba de solapamiento → **409 Conflict**
-- Prueba de reserva inexistente (GET) → **404 Not Found**
-- Prueba de borrado inexistente → **404 Not Found**
-- Prueba de error general → **500 Internal Server Error**
-
-### Resultado
-- La API responde de forma **consistente y profesional** ante cualquier error.
-- El comportamiento es **predecible, claro y adecuado** para entornos reales.
-
---------------------------------------------------
+- Preparar la explicación del proyecto para la defensa.
+- Revisar commits y razonamientos para poder explicarlos sin mirar código.
