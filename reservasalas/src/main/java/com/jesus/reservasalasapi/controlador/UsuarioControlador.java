@@ -2,12 +2,17 @@ package com.jesus.reservasalasapi.controlador;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jesus.reservasalasapi.excepciones.UsuarioNoEncontradoException;
 import com.jesus.reservasalasapi.modelo.Usuario;
 import com.jesus.reservasalasapi.repositorio.Repositorio_Usuario;
 
@@ -32,6 +37,34 @@ public class UsuarioControlador {
     public Usuario crearUsuario(@RequestBody Usuario usuario) {
         return usuarioRepositorio.save(usuario);
     }
+
+    @GetMapping("/{id}")
+    public Usuario obtenerUsuarioPorId(@PathVariable Long id) {
+        return usuarioRepositorio.findById(id)
+                .orElseThrow(() -> new UsuarioNoEncontradoException(id));
+    }
+
+    @PutMapping("/{id}")
+    public Usuario editarUsuario(@PathVariable Long id, @RequestBody Usuario usuarioActualizado) {
+        Usuario usuario = usuarioRepositorio.findById(id)
+                .orElseThrow(() -> new UsuarioNoEncontradoException(id));
+
+        usuario.setNombre_usuario(usuarioActualizado.getNombre_usuario());
+        usuario.setEmail_usuario(usuarioActualizado.getEmail_usuario());
+
+        return usuarioRepositorio.save(usuario);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> borrarUsuario(@PathVariable Long id) {
+        if (!usuarioRepositorio.existsById(id)) {
+            throw new UsuarioNoEncontradoException(id);
+        }
+
+        usuarioRepositorio.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }
 
 /*
